@@ -38,7 +38,7 @@ command:
         cd
         |
         exit
-        ;
+		;
 
 cd:
         CHANGE_DIR FILE_NAME
