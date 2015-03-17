@@ -14,7 +14,9 @@ int yywrap(){
 }
 
 int main(){
-    yyparse();
+    puts("|--------Welcome to derp shell!--------|"); 
+	puts(" By: Vincent Moscatello, Jesse Everett");
+	yyparse();
 }
 
 %}
