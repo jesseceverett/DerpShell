@@ -16,6 +16,7 @@ int yywrap(){
 int main(){
     puts("|--------Welcome to derp shell!--------|"); 
 	puts(" By: Vincent Moscatello, Jesse Everett");
+	printf("%s","$ ");
 	yyparse();
 }
 
@@ -28,7 +29,9 @@ int main(){
 %%
 
 commands: /* empty */
-        | commands command
+        | commands command{
+			printf("%s","$ ");
+		}
         ;
 
 command:
@@ -50,7 +53,7 @@ cd:
 exit:
         EXIT
         {
-                printf("\tTerminating Session!!!\n");
+                printf("Goodbye for now!!!!\n");
                 exit(0);
         }
         ;
