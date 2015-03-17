@@ -44,7 +44,6 @@ cd:
         CHANGE_DIR FILE_NAME
         {
             chdir($2);
-            system("/bin/ls"); //print directory for debugging
             free($2); //since we used strdup on yytext
         }
         ;
