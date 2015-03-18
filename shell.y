@@ -38,6 +38,8 @@ command:
         cd
         |
         exit
+		|
+		cmd
 		;
 
 cd:
@@ -56,5 +58,29 @@ exit:
                 exit(0);
         }
         ;
+cmd:
+   		FILE_NAME
+		{
+			puts("HIT FILE NAME");
+			pid_t pid = fork();
+			
+			if(pid == 0){
+				char * subproc_argv[2];
+				subproc_argv[0] = $1;
+				subproc_argv[1] = NULL;
+
+				char * envp[] = {NULL};
+
+				if(execve($1, subproc_argv, envp)==-1){
+					puts("execve has failed");
+				}
+			}else{
+				/*This is where the shell will wait for subprocess to terminate*/
+				/*This will not happen if an & is used*/
+			}
+			
+			free($1);
+			
+		}
 
 %%
