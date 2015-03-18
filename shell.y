@@ -59,7 +59,7 @@ exit:
         }
         ;
 cmd:
-   		FILE_NAME
+   		FILE_NAME COMMAND_ARGV
 		{
 			pid_t pid = fork();
 			
@@ -82,5 +82,17 @@ cmd:
 			free($1);
 			
 		}
+		;
+
+
+COMMAND_ARGV:{
+//This was added to handle programs that require mutliple parameters.
+
+}
+|
+COMMAND_ARGV COMMAND_ARGV{
+//This is the recursive version if number of parameters is > 1
+
+};
 
 %%
