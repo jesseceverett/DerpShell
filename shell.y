@@ -61,7 +61,6 @@ exit:
 cmd:
    		FILE_NAME
 		{
-			puts("HIT FILE NAME");
 			pid_t pid = fork();
 			
 			if(pid == 0){
@@ -75,8 +74,9 @@ cmd:
 					puts("execve has failed");
 				}
 			}else{
-				/*This is where the shell will wait for subprocess to terminate*/
-				/*This will not happen if an & is used*/
+				int status;
+				waitpid(pid, status, NULL);
+			
 			}
 			
 			free($1);
