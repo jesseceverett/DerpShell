@@ -2,12 +2,12 @@
 #define DATA_STRUCTURES_H
 typedef struct node{
 	char * data;
-	node * next;
+	struct node * next;
 } node;
 
 typedef struct linked_list{
-	node * start;
-	node * end;
+	struct node * start;
+	struct node * end;
 } linked_list;
 
 void free_linked_list(linked_list * linked_list);
