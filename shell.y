@@ -59,18 +59,44 @@ exit:
         }
         ;
 cmd:
-   		FILE_NAME COMMAND_ARGV
+   		FILE_NAME
 		{
-			pid_t pid = fork();
 			
-			if(pid == 0){
-				char * subproc_argv[2];
-				subproc_argv[0] = $1;
-				subproc_argv[1] = NULL;
+			pid_t pid = fork();
 
+			if(pid == 0){
+				//Lets first count the number of words so we know how much space to allocate for
+				//command_argv array
+				int i =0;
+				unsigned int command_count=0;
+				for(i=0; $1[i]!='\x00'; i++){
+					if($1[i]==' '){
+						command_count++;
+					}
+				}
+				command_count=command_count +2;
+				
+				//Allocate enough space on the heap for the pointers to command arguments.
+				char ** command_array = malloc(sizeof(char *)*command_count);
+
+				//Run strtok to tokenize the command arguments 
+				char * command = strtok($1," ");
+				
+				//assign the paramters to command to command_array 
+				char * foo;
+				unsigned int index=0;
+				for(foo = command; foo; foo = strtok(NULL, " ")){
+					if(index >= command_count)
+						break;
+					puts(foo);
+					command_array[index] = foo;
+					index++;
+				}
+
+				//envp is not used but is necissary for execve syscommand
 				char * envp[] = {NULL};
 
-				if(execve($1, subproc_argv, envp)==-1){
+				if(execve($1, command_array, envp)==-1){
 					puts("execve has failed");
 				}
 			}else{
@@ -85,14 +111,5 @@ cmd:
 		;
 
 
-COMMAND_ARGV:{
-//This was added to handle programs that require mutliple parameters.
-
-}
-|
-COMMAND_ARGV COMMAND_ARGV{
-//This is the recursive version if number of parameters is > 1
-
-};
 
 %%
