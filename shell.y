@@ -88,7 +88,6 @@ cmd:
 				for(foo = command; foo; foo = strtok(NULL, " ")){
 					if(index >= command_count)
 						break;
-					puts(foo);
 					command_array[index] = foo;
 					index++;
 				}
