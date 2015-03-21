@@ -42,17 +42,19 @@ commands: /* empty */
 //	   	{ $$ = $1;}
 
 command:
-	   NEW_LINE
-	   |
-        cd NEW_LINE
-        |
-        exit NEW_LINE
+		NEW_LINE
+		|
+		cd NEW_LINE
+		|
+		exit NEW_LINE
 		|
 		cmd NEW_LINE
 		;
 
 cd:
-        CHANGE_DIR FILE_NAME
+  		CHANGE_DIR{chdir(getenv("HOME"));}
+        |
+		CHANGE_DIR FILE_NAME
         {
             chdir($2);
             free($2); //since we used strdup on yytext
