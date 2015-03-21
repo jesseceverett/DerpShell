@@ -53,14 +53,14 @@ command:
 		;
 
 cd:
-  		CHANGE_DIR{chdir(getenv("HOME"));}
-        |
+		CHANGE_DIR{chdir(getenv("HOME"));}
+		|
 		CHANGE_DIR FILE_NAME
-        {
-            chdir($2);
-            free($2); //since we used strdup on yytext
-        }
-        ;
+		{
+		chdir($2);
+			free($2); //since we used strdup on yytext
+		}
+		;
 
 
 exit:
