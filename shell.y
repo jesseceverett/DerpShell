@@ -24,7 +24,7 @@ int main(){
 %}
 
 %union {char * string; int num; void * linkedlist;}
-%token EXIT CHANGE_DIR NEW_LINE
+%token EXIT CHANGE_DIR NEW_LINE SET_ENV PRINT_ENV
 %token <string> FILE_NAME
 
 %left CHANGE_DIR FILE_NAME
@@ -50,6 +50,10 @@ command:
 		exit NEW_LINE
 		|
 		cmd NEW_LINE
+		|
+		set_env NEW_LINE
+		|
+		print_env NEW_LINE
 		;
 
 /********************************************************************************************
@@ -64,11 +68,27 @@ cd:
 		|
 		CHANGE_DIR FILE_NAME
 		{
-		chdir($2);
+			chdir($2);
 			free($2); //since we used strdup on yytext
 		}
 		;
 
+set_env:
+		SET_ENV FILE_NAME FILE_NAME
+		{
+			setenv($2, $3,1);
+		}
+
+print_env:
+		PRINT_ENV
+		{
+
+			extern char **environ;
+			char ** current_value = environ;
+			for(;*current_value != NULL; current_value++){
+				puts(*current_value);
+			}
+		}
 
 exit:
 		EXIT
