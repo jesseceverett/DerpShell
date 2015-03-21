@@ -11,6 +11,6 @@ bye                     return EXIT;
 [a-zA-Z0-9\/.-]+        yylval.string = strdup(yytext); return FILE_NAME;
 
 \n                      return NEW_LINE;
-                  /* ignore whitespace */;
+[ \t]+                  /* ignore whitespace */;
 
 %%
