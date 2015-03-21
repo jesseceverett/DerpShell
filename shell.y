@@ -3,7 +3,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "data_structures/data_structures.h"
+#include "dev/data_structures/data_structures.h"
+#include "dev/user_created_commands.h"
 void yyerror(const char *str)
 {
         fprintf(stderr,"error: %s\n",str);
@@ -34,10 +35,10 @@ int main(){
 %%
 
 commands: /* empty */
-        | commands command{
+		| commands command{
 			printf("%s","$ ");
 		}
-        ;
+		;
 //command: sub_command NEW_LINE
 //	   	{ $$ = $1;}
 
@@ -63,20 +64,35 @@ cd:
 
 
 exit:
-        EXIT
-        {
-                printf("Goodbye for now!!!!\n");
-                exit(0);
-        }
-        ;
-cmd:
-   		arg_list
+		EXIT
 		{
-			
-			print_linked_list($1);
-			system("/bin/ls");
-			
+			printf("Goodbye for now!!!!\n");
+			exit(0);
 		}
+		;
+
+
+/********************************************************************************************
+ *
+ *The following section, cmd, arg_list, and arg describe the functionality of "other commands"
+ *(commands defined outside of the shell) ex: /bin/ls -l
+ *
+ ********************************************************************************************/
+
+cmd:
+		arg_list
+		{
+			int status;
+			pid_t pid = fork();
+
+			if(pid == 0){
+				//This function is defined in user_created_commands.c
+				execute_externel_command($1);
+			}else{
+				free_linked_list($1);
+				waitpid(pid, &status, 0);
+			}
+		}	
 		;
 arg_list:
 		arg{ linked_list* ll = create_linked_list();
@@ -86,5 +102,7 @@ arg_list:
 		arg_list arg{push_linked_list($1,$2); $$ = $1;}
 	
 arg: FILE_NAME{$$=$1;}
+
+
 %%
 
