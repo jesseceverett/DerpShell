@@ -52,6 +52,13 @@ command:
 		cmd NEW_LINE
 		;
 
+/********************************************************************************************
+ *
+ *The following section describes built in commands such as cd, alias, and setenv
+ *
+ ********************************************************************************************/
+
+
 cd:
 		CHANGE_DIR{chdir(getenv("HOME"));}
 		|
