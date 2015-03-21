@@ -11,8 +11,8 @@ lex.yy.o: y.tab.h lex.yy.c
 	$(CC) -c lex.yy.c 
 lex.yy.c: shell.l
 	$(LEX) shell.l 
-data_structures.o: data_structures/data_structures.c data_structures/data_structures.h
-	$(CC) -c data_structures/data_structures.c
+data_structures.o: dev/data_structures/data_structures.c dev/data_structures/data_structures.h
+	$(CC) -c dev/data_structures/data_structures.c
 clean:
 	rm *.o
 	rm *.c
