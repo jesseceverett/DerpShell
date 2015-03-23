@@ -4,7 +4,7 @@ COP4600 Shell project for Dr. Sumi Helal Spring 2015
 Submission by:  Vincent Moscatello
                 Jesse Everett
 
-Summary of Files:
+##Summary of Files:
   To help keep the project organized some of the code that drives the shell is kept seperate from the lex and yacc files
   shell.y and shell.l. These files can be found in the directory dev.
     
