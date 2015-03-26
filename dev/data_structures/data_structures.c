@@ -20,7 +20,7 @@ void free_linked_list(linked_list * linkedlist){
 	free(linkedlist);
 }
 
-void push_linked_list(linked_list * linkedlist, char * data){
+void push_linked_list(linked_list * linkedlist, void * data){
 	node * new_node = malloc(sizeof(node));
 	new_node->data = data;
 	new_node->next = NULL;

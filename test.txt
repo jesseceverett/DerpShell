@@ -1,0 +1,12 @@
+/bin/ls
+cd /
+/bin/ls
+printenv
+setenv foo bar
+setenv baz qup
+setenv pud dorp
+printenv
+bye
+
+
+

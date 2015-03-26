@@ -37,3 +37,28 @@ void execute_externel_command(linked_list * linkedlist){
 
 
 }
+
+void pop_alias_list(linked_list * linkedlist, char * data){
+        //this function will pop the element that contains "data"
+        node * current_node;
+        node * next_node;
+	node * prev_node;
+	prev_node = NULL;
+        current_node = linkedlist->start;       //grab the first node
+	next_node = current_node->next;		//grab the next node
+        while(current_node!=NULL){
+                //search the full list
+		if(((alias_node *)(current_node->data))->alias_name == data){
+			//pop
+			prev_node->next = next_node;
+			break;
+		}
+		else{
+			//go to next node
+			prev_node = current_node;
+			current_node = current_node->next;
+			next_node = next_node->next;
+		}
+        }
+}
+

@@ -5,6 +5,10 @@
 #include <stdlib.h>
 #include "dev/data_structures/data_structures.h"
 #include "dev/user_created_commands.h"
+
+//global variable
+linked_list * aliases;		//this is to hold the aliased names
+
 void yyerror(const char *str)
 {
         fprintf(stderr,"error: %s\n",str);
@@ -19,12 +23,15 @@ int main(){
 	puts(" By: Vincent Moscatello, Jesse Everett");
 	printf("%s","$ ");
 	yyparse();
+	//global variable
+	linked_list * aliases = create_linked_list();	//this is to hold the aliased names
+
 }
 
 %}
 
 %union {char * string; int num; void * linkedlist;}
-%token EXIT CHANGE_DIR NEW_LINE SET_ENV PRINT_ENV
+%token EXIT CHANGE_DIR NEW_LINE SET_ENV PRINT_ENV ALIAS
 %token <string> FILE_NAME
 
 %left CHANGE_DIR FILE_NAME
@@ -54,6 +61,8 @@ command:
 		set_env NEW_LINE
 		|
 		print_env NEW_LINE
+		|
+		alias NEW_LINE
 		;
 
 /********************************************************************************************
@@ -88,6 +97,12 @@ print_env:
 			for(;*current_value != NULL; current_value++){
 				puts(*current_value);
 			}
+		}
+alias:
+		ALIAS
+		{
+			//alias code here
+			//alias	
 		}
 
 exit:
