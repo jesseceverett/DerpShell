@@ -94,6 +94,7 @@ exit:
 		EXIT
 		{
 			printf("Goodbye for now!!!!\n");
+			printf("MY PID IS %d\n", getpid());
 			exit(0);
 		}
 		;
@@ -112,17 +113,23 @@ cmd:
 			int status;
 			pid_t pid = fork();
 
+			printf("MY PID IS %d\n", pid);
 			if(pid == 0){
 				//This function is defined in user_created_commands.c
 				execute_externel_command($1);
+				//incase command fails
+				exit(0);
 			}else{
+				printf("freed linked list is: %x\n",$1);
 				free_linked_list($1);
 				waitpid(pid, &status, 0);
 			}
 		}	
 		;
 arg_list:
-		arg{ linked_list* ll = create_linked_list();
+		arg{ 
+			linked_list* ll = create_linked_list();
+			printf("allocated linked list is: %x\n",ll);
 			push_linked_list(ll,$1);
 			$$=ll;}
 		|

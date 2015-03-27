@@ -28,12 +28,16 @@ void execute_externel_command(linked_list * linkedlist){
 		current_node = current_node->next;
 	}
 	command = arguments[0];
-	
-
-	puts(command);
-	if(execve(command, arguments, envp)<0){
-		puts("execve has failed");
+	arguments[1] = NULL;
+	int temp_var;
+	for(temp_var = 0; temp_var < list_element_count; temp_var++){
+		puts(arguments[temp_var]);
 	}
+
+	printf("The command you entered was %s", command);
+	printf("execve has returned %d",execve(command, arguments, envp));
+	perror("ERROR HERE");	
+	
 
 
 }
