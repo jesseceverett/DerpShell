@@ -62,3 +62,22 @@ void pop_alias_list(linked_list * linkedlist, char * data){
         }
 }
 
+void print_alias_list(linked_list * linkedlist){
+	node * current_node = linkedlist->start;
+	
+	char * tmp_alias_name;
+	char * tmp_value;
+	
+	while(current_node != NULL){
+		tmp_alias_name = ((alias_node *)(((node *)(current_node->data))->data))->alias_name;
+		tmp_value = ((alias_node *)(((node *)(current_node->data))->data))->value;
+		
+		printf("%s=%s\n", tmp_alias_name, tmp_value);
+		
+		current_node = current_node->next;
+	}
+	
+}
+
+
+

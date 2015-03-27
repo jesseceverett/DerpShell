@@ -3,6 +3,8 @@
 
 linked_list * create_linked_list(){
 	linked_list * linkedlist = malloc(sizeof(linked_list));
+	linkedlist->start = NULL;
+	linkedlist->end = NULL;
 	return linkedlist;
 }
 

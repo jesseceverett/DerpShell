@@ -22,16 +22,15 @@ int main(){
     puts("|--------Welcome to derp shell!--------|"); 
 	puts(" By: Vincent Moscatello, Jesse Everett");
 	printf("%s","$ ");
+	aliases = create_linked_list();	//this is to hold the aliased names
 	yyparse();
-	//global variable
-	linked_list * aliases = create_linked_list();	//this is to hold the aliased names
 
 }
 
 %}
 
 %union {char * string; int num; void * linkedlist;}
-%token EXIT CHANGE_DIR NEW_LINE SET_ENV PRINT_ENV ALIAS
+%token EXIT CHANGE_DIR NEW_LINE SET_ENV PRINT_ENV ALIAS UNALIAS
 %token <string> FILE_NAME
 
 %left CHANGE_DIR FILE_NAME
@@ -63,6 +62,8 @@ command:
 		print_env NEW_LINE
 		|
 		alias NEW_LINE
+		|
+		unalias NEW_LINE
 		;
 
 /********************************************************************************************
@@ -98,11 +99,28 @@ print_env:
 				puts(*current_value);
 			}
 		}
-alias:
-		ALIAS
+alias:		
+
+		ALIAS{
+			print_alias_list(aliases);	
+		}
+		|
+		ALIAS FILE_NAME FILE_NAME
 		{
-			//alias code here
-			//alias	
+			//declare new node to insert into aliases linkedlist
+			node * new_node = malloc(sizeof(struct node));
+			new_node->data = malloc(sizeof(struct alias_node));
+			
+			((alias_node *)(new_node->data))->alias_name = $2;
+			((alias_node *)(new_node->data))->value = $3;
+			
+			//currently experiencing seg faults here
+			push_linked_list(aliases,new_node);
+		}
+unalias:	
+		UNALIAS FILE_NAME	
+		{
+			pop_alias_list(aliases,$2);
 		}
 
 exit:

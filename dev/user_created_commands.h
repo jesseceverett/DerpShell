@@ -9,6 +9,8 @@ typedef struct alias_node{
 
 //Executes a command defined outside of bash given a linked list. The first element of the linked list is the command and the elements that follow it are parameters to that command.
 void execute_externel_command(linked_list * linkedlist);
+void pop_alias_list(linked_list * linkedlist, char * data);
+void print_alias_list(linked_list * linkedlist);
 
 
 #endif
