@@ -5,4 +5,7 @@
 //Executes a command defined outside of bash given a linked list. The first element of the linked list is the command and the elements that follow it are parameters to that command.
 void execute_externel_command(linked_list * linkedlist);
 
+//returns 0 if element is found in path.
+int executable_in_path(linked_list * linkedlist);
+
 #endif

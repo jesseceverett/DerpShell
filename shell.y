@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include "dev/data_structures/data_structures.h"
 #include "dev/user_created_commands.h"
 
@@ -119,6 +120,21 @@ exit:
 cmd:
 		arg_list
 		{
+			
+			//check if the command can be executed. If not check if command is in PATH env
+			if(access(((linked_list *)$1)->start->data, X_OK)==0){
+				/*Everything is ok! break from if*/
+				puts(((linked_list *)$1)->start->data);
+			}
+			else if(executable_in_path($1) == 0){
+				/*Element found in path!*/
+				puts(((linked_list *)$1)->start->data);
+			}else{
+				puts("Command not found!");
+				goto final;
+			}
+			
+			
 			int status;
 			pid_t pid = fork();
 
@@ -131,6 +147,9 @@ cmd:
 				free_linked_list($1);
 				waitpid(pid, &status, 0);
 			}
+			
+			final:
+				asm("nop");
 		}	
 		;
 arg_list:

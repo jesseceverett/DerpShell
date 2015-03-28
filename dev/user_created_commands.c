@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
 #include "user_created_commands.h"
 #include "data_structures/data_structures.h"
@@ -40,6 +42,27 @@ void execute_externel_command(linked_list * linkedlist){
 
 	execve(command, arguments, envp);
 	
-
-
 }
+
+
+/*
+ *Will return 0 if executable can be successfully found in path
+ */
+int executable_in_path(linked_list * linkedlist){
+	char * heap_path_env;
+	heap_path_env = strdup(getenv("PATH"));
+	
+	strcat(heap_path_env, linkedlist->start->data);
+
+	if(access(heap_path_env, X_OK)==0){
+		linkedlist->start->data = heap_path_env;
+		return 0;
+	}else{
+		return -1;
+	}
+	
+}
+
+
+
+
