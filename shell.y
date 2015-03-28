@@ -26,7 +26,7 @@ int main(){
 %}
 
 %union {char * string; int num; void * linkedlist;}
-%token EXIT CHANGE_DIR NEW_LINE SET_ENV PRINT_ENV
+%token EXIT CHANGE_DIR NEW_LINE SET_ENV PRINT_ENV UNSET_ENV
 %token <string> FILE_NAME
 
 %left CHANGE_DIR FILE_NAME
@@ -56,6 +56,8 @@ command:
 		set_env NEW_LINE
 		|
 		print_env NEW_LINE
+		|
+		unset_env NEW_LINE
 		;
 
 /********************************************************************************************
@@ -90,6 +92,12 @@ print_env:
 			for(;*current_value != NULL; current_value++){
 				puts(*current_value);
 			}
+		}
+
+unset_env:
+		UNSET_ENV FILE_NAME
+		{
+			unsetenv($2);
 		}
 
 exit:

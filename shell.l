@@ -8,6 +8,7 @@
 cd                      return CHANGE_DIR;
 bye                     return EXIT;
 setenv					return SET_ENV;
+unsetenv				return UNSET_ENV;
 printenv				return PRINT_ENV;
 
 [a-zA-Z0-9\/.-]+        yylval.string = strdup(yytext); return FILE_NAME;
