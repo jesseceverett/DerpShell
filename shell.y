@@ -124,11 +124,9 @@ cmd:
 			//check if the command can be executed. If not check if command is in PATH env
 			if(access(((linked_list *)$1)->start->data, X_OK)==0){
 				/*Everything is ok! break from if*/
-				puts(((linked_list *)$1)->start->data);
 			}
 			else if(executable_in_path($1) == 0){
 				/*Element found in path!*/
-				puts(((linked_list *)$1)->start->data);
 			}else{
 				puts("Command not found!");
 				goto final;
