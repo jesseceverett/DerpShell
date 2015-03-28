@@ -63,6 +63,16 @@ int executable_in_path(linked_list * linkedlist){
 	
 }
 
+void push_alias_name(linked_list * aliaslist, char * name, char * value){
+	push_linked_list(aliaslist, value);
+	aliaslist->end->name_of_node = name;
+}
 
-
+void print_alias_list(linked_list * aliaslist){
+	node * current_node = aliaslist->start;
+	while(current_node != NULL){
+		printf("%s=%s\n", current_node->name_of_node, current_node->data);
+		current_node = current_node->next;
+	}
+}
 

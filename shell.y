@@ -7,6 +7,7 @@
 #include "dev/data_structures/data_structures.h"
 #include "dev/user_created_commands.h"
 
+linked_list * aliases;
 
 void yyerror(const char *str)
 {
@@ -21,13 +22,15 @@ int main(){
     puts("|--------Welcome to derp shell!--------|"); 
 	puts(" By: Vincent Moscatello, Jesse Everett");
 	printf("%s","$ ");
+	aliases = create_linked_list();
+	
 	yyparse();
 }
 
 %}
 
 %union {char * string; int num; void * linkedlist;}
-%token EXIT CHANGE_DIR NEW_LINE SET_ENV PRINT_ENV UNSET_ENV
+%token EXIT CHANGE_DIR NEW_LINE SET_ENV PRINT_ENV UNSET_ENV ALIAS UNALIAS
 %token <string> FILE_NAME
 
 %left CHANGE_DIR FILE_NAME
@@ -59,6 +62,10 @@ command:
 		print_env NEW_LINE
 		|
 		unset_env NEW_LINE
+		|
+		alias NEW_LINE
+		|
+		unalias NEW_LINE
 		;
 
 /********************************************************************************************
@@ -99,6 +106,20 @@ unset_env:
 		UNSET_ENV FILE_NAME
 		{
 			unsetenv($2);
+		}
+
+alias:
+		ALIAS{
+			print_alias_list(aliases);
+		}
+		|
+		ALIAS FILE_NAME FILE_NAME{
+			push_alias_name(aliases, $2, $3);
+		}
+
+unalias:
+		UNALIAS FILE_NAME{
+			puts("SANITY CHECK");	
 		}
 
 exit:

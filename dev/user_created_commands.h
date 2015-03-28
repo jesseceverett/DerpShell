@@ -8,4 +8,8 @@ void execute_externel_command(linked_list * linkedlist);
 //returns 0 if element is found in path.
 int executable_in_path(linked_list * linkedlist);
 
+void remove_alias_name(linked_list * aliaslist, char * name);
+void push_alias_name(linked_list * aliaslist, char * name, char * value);
+void print_alias_list(linked_list * aliaslist);
+
 #endif
