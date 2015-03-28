@@ -19,7 +19,6 @@ void execute_externel_command(linked_list * linkedlist){
 	}
 	list_element_count++;	//add an extra number to the element count to ensure the last one is NULL
 	
-	printf("list_element_count has value %d\n", list_element_count);
 	//allocate the memory + 1 because argument list need to end with NULL pointer
 	arguments = calloc(sizeof(char *), list_element_count);
 	
@@ -39,9 +38,7 @@ void execute_externel_command(linked_list * linkedlist){
 	//	puts(arguments[temp_var]);
 	//}
 
-	printf("The command you entered was %s", command);
-	printf("execve has returned %d",execve(command, arguments, envp));
-	perror("ERROR HERE");	
+	execve(command, arguments, envp);
 	
 
 

@@ -5,12 +5,10 @@ linked_list * create_linked_list(){
 	linked_list * linkedlist = malloc(sizeof(linked_list));
 	linkedlist->start = NULL;
 	linkedlist->end = NULL;
-	printf("Linked list was created at %x\n",linkedlist);
 	return linkedlist;
 }
 
 void free_linked_list(linked_list * linkedlist){
-	printf("Inside free linked list address is: %x\n", linkedlist);
 	node * current_node = linkedlist->start;
 	
 	while(current_node->next != NULL){
@@ -39,7 +37,6 @@ void push_linked_list(linked_list * linkedlist, char * data){
 void print_linked_list(linked_list * linkedlist){
 	node * current_node = linkedlist->start;
 	while(current_node->next !=NULL){
-		printf("I am a node my address is %x\n", current_node);
 		current_node = current_node->next;
 	}
 	puts(current_node->data);
