@@ -119,7 +119,7 @@ alias:
 
 unalias:
 		UNALIAS FILE_NAME{
-			puts("SANITY CHECK");	
+			remove_alias_name(aliases, $2);
 		}
 
 exit:

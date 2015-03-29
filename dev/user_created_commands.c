@@ -76,3 +76,42 @@ void print_alias_list(linked_list * aliaslist){
 	}
 }
 
+int remove_alias_name(linked_list * aliaslist, char * name){
+	if(aliaslist->start==NULL){
+		return -1;
+	}
+	
+	node * current_node = aliaslist->start;
+	node * next_node = current_node->next;
+	node * prev_node = NULL;
+	
+	puts("ENTERING WHILE LOOP");
+	printf("The value of current_node is %x", current_node);
+	while(current_node != NULL){
+		puts("IN WHILE LOOP");
+		if(strcmp(current_node->name_of_node, name)==0){
+			puts("IN STRCMP");
+			if(prev_node == NULL){
+				aliaslist->start = next_node;
+			}
+			else if (next_node == NULL){
+				puts("I AM AT NEXTNODE == NULL");
+				aliaslist->end = prev_node;
+				prev_node->next = NULL;
+			}
+			else{
+				prev_node->next = next_node;
+				printf("The value of nex_node is %x", next_node);
+			}
+			free(current_node);
+			break;
+		}
+		puts("GOING TO NEXT NODE");
+		prev_node = current_node;
+		current_node = current_node->next;
+		next_node = current_node->next;
+	
+
+	}
+}
+
