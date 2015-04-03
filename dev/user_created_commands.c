@@ -134,3 +134,8 @@ int remove_alias_name(linked_list * aliaslist, char * name){
 	}
 }
 
+void handle_signal(){
+	puts("Use bye to exit shell!!!");
+}
+
+

@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <signal.h>
 #include "dev/data_structures/data_structures.h"
 #include "dev/user_created_commands.h"
 
@@ -19,7 +20,9 @@ int yywrap(){
 }
 
 int main(){
-    puts("|--------Welcome to derp shell!--------|"); 
+    signal(SIGINT, handle_signal);
+	
+	puts("|--------Welcome to derp shell!--------|"); 
 	puts(" By: Vincent Moscatello, Jesse Everett");
 	printf("%s","$ ");
 	aliases = create_linked_list();

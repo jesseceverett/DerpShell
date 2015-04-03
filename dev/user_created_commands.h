@@ -12,4 +12,5 @@ int remove_alias_name(linked_list * aliaslist, char * name);
 void push_alias_name(linked_list * aliaslist, char * name, char * value);
 void print_alias_list(linked_list * aliaslist);
 
+void handle_signal();
 #endif
