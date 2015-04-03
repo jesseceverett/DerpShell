@@ -18,7 +18,8 @@ user_created_commands.o: dev/user_created_commands.c dev/user_created_commands.h
 
 clean:
 	rm *.o
-	rm *.c
-	rm *.h
+	rm lex.yy.c
+	rm y.tab.c
+	rm y.tab.h
 	rm shell
 
