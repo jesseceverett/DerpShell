@@ -51,15 +51,34 @@ void execute_externel_command(linked_list * linkedlist){
 int executable_in_path(linked_list * linkedlist){
 	char * heap_path_env;
 	heap_path_env = strdup(getenv("PATH"));
-	
-	strcat(heap_path_env, linkedlist->start->data);
+	char * tmp_path = NULL;
+	char * tmp_var;
 
-	if(access(heap_path_env, X_OK)==0){
-		linkedlist->start->data = heap_path_env;
-		return 0;
-	}else{
-		return -1;
+	tmp_path = strtok(heap_path_env, ":");
+	tmp_var = malloc(strlen(tmp_path)+1);
+	strcpy(tmp_var, tmp_path);
+	
+	while(tmp_path != NULL){
+		char * slash = malloc(sizeof(char));
+		*slash = '/';
+		strcat(tmp_var, slash); 
+		strcat(tmp_var, strdup(linkedlist->start->data));
+		if(access(tmp_var, X_OK)==0){
+			linkedlist->start->data = tmp_var;
+			return 0;
+		}
+		free(slash); 
+		tmp_path = strtok(NULL, ":");
+		if(tmp_path != NULL){
+			tmp_var = malloc(strlen(tmp_path)+1);
+			strcpy(tmp_var, tmp_path);
+		}
+
 	}
+
+
+	return -1;
+	
 	
 }
 
