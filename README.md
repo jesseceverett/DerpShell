@@ -14,7 +14,7 @@ Submission by:  Vincent Moscatello
   **dev/user_created_commands.c** contains the implementation of user created functions such as execute_externel_command
   that would have created too much clutter in the file yacc.
   
-  ##Curently Working:
+##Curently Working:
   setenv
   unsetenv
   printenv
@@ -24,7 +24,7 @@ Submission by:  Vincent Moscatello
   alias (the substitution is currently not working)
   as well as just typing "ls" will search the entire path to find /bin/ls and execute that
   
-  ##Not Working:
+##Not Working:
   I/O redirection and other piping
   Alias subsitution
   Metacharacters (wildcards and such)
