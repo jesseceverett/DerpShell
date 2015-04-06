@@ -134,6 +134,73 @@ int remove_alias_name(linked_list * aliaslist, char * name){
 	}
 }
 
+char * check_for_alias(char * buffer){
+	return NULL;
+}
+
+char * check_for_env(char * buffer){
+	char * start_pointer;
+	char * end_pointer;
+	char env_buffer[1024];
+	char environment;
+	
+	char * return_buffer;
+	char * return_buffer_refrence;
+
+	if((start_pointer = strchr(buffer, '$')) != NULL){
+		if(*(start_pointer + 1) == '{'){
+			end_pointer = strchr(start_pointer+2,'}');
+			//Handle the actual replacement
+			int size_to_read = end_pointer-start_pointer-2;
+			//write(1,start_pointer, size);
+			
+			strncpy(env_buffer, start_pointer+2, size_to_read);
+			puts(env_buffer);
+			
+			puts(getenv(env_buffer));
+			
+			return_buffer = malloc(1024);
+			
+			int up_to_size_pointer = start_pointer - buffer + 1;
+			strncpy(return_buffer, buffer, up_to_size_pointer-1);
+			return_buffer_refrence =&buffer[up_to_size_pointer];
+			
+			return_buffer = strcat(return_buffer, getenv(env_buffer));
+			return_buffer_refrence = &return_buffer[strlen(return_buffer)-1];
+			
+			strncpy(return_buffer_refrence+1, end_pointer+1, strlen(end_pointer)-1);
+
+			puts(return_buffer);
+
+			return return_buffer;
+		}
+		else{
+			return NULL;
+		}
+	}
+	
+	return NULL;
+}
+
+char * replace_token(char * buffer){
+	char * return_buffer = check_for_env(buffer);
+	
+	while(return_buffer!=NULL){	
+		buffer = return_buffer;
+		return_buffer = check_for_env(return_buffer);
+	}
+		
+	//return_buffer = check_for_alias(return_buffer);
+	//while(return_buffer!=NULL){
+	//	buffer = return_buffer;
+	//	return_buffer = check_for_alias(return_buffer);
+	//}
+	
+	//puts(buffer);
+	return buffer;
+}
+
+
 void handle_signal(){
 	puts("Use bye to exit shell!!!");
 }

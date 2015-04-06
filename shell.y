@@ -20,7 +20,7 @@ int yywrap(){
 }
 
 int main(){
-    signal(SIGINT, handle_signal);
+//    signal(SIGINT, handle_signal);
 	
 	puts("|--------Welcome to derp shell!--------|"); 
 	puts(" By: Vincent Moscatello, Jesse Everett");
@@ -29,6 +29,7 @@ int main(){
 		printf("%s","$ ");
 		char buffer[1024];
 		fgets(buffer,1024,stdin);
+		strcpy(buffer,replace_token(buffer));
 		yy_switch_to_buffer(yy_scan_string(buffer));
 		yyparse();
 	}
