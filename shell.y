@@ -24,10 +24,14 @@ int main(){
 	
 	puts("|--------Welcome to derp shell!--------|"); 
 	puts(" By: Vincent Moscatello, Jesse Everett");
-	printf("%s","$ ");
 	aliases = create_linked_list();
-	
-	yyparse();
+	while(1){
+		printf("%s","$ ");
+		char buffer[1024];
+		fgets(buffer,1024,stdin);
+		yy_switch_to_buffer(yy_scan_string(buffer));
+		yyparse();
+	}
 }
 
 %}
@@ -43,13 +47,15 @@ int main(){
 
 %%
 
-commands: /* empty */
-		| commands command{
-			printf("%s","$ ");
-		}
-		;
 //command: sub_command NEW_LINE
 //	   	{ $$ = $1;}
+
+//commands:
+//				| commands command
+//				{				
+//					printf("%s$ ",getenv("PWD"));
+//				};
+														
 
 command:
 		NEW_LINE
@@ -93,7 +99,7 @@ set_env:
 		{
 			setenv($2, $3,1);
 		}
-
+		;
 print_env:
 		PRINT_ENV
 		{
@@ -104,13 +110,13 @@ print_env:
 				puts(*current_value);
 			}
 		}
-
+		;
 unset_env:
 		UNSET_ENV FILE_NAME
 		{
 			unsetenv($2);
 		}
-
+		;
 alias:
 		ALIAS{
 			print_alias_list(aliases);
@@ -119,12 +125,12 @@ alias:
 		ALIAS FILE_NAME FILE_NAME{
 			push_alias_name(aliases, $2, $3);
 		}
-
+		;
 unalias:
 		UNALIAS FILE_NAME{
 			remove_alias_name(aliases, $2);
 		}
-
+		;
 exit:
 		EXIT
 		{
@@ -181,8 +187,8 @@ arg_list:
 			$$=ll;}
 		|
 		arg_list arg{push_linked_list($1,$2); $$ = $1;}
-	
-arg: FILE_NAME{$$=$1;}
+		;
+arg: FILE_NAME{$$=$1;};
 
 
 %%
