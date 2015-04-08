@@ -14,9 +14,11 @@ void print_alias_list(linked_list * aliaslist);
 
 void handle_signal();
 
-char * check_for_alias(char * buffer);
+char * check_for_alias(linked_list * aliaslist, char * buffer);
 char * check_for_env(char * buffer);
 
-char * replace_token(char * buffer);
+char * replace_token(linked_list * aliaslist, char * buffer);
+
+char * replace(char *str, char * origin, char * rep);
 
 #endif

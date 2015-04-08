@@ -29,7 +29,7 @@ int main(){
 		printf("%s","$ ");
 		char buffer[1024];
 		fgets(buffer,1024,stdin);
-		strcpy(buffer,replace_token(buffer));
+		strcpy(buffer,replace_token(aliases,buffer));
 		yy_switch_to_buffer(yy_scan_string(buffer));
 		yyparse();
 	}

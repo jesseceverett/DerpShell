@@ -134,7 +134,77 @@ int remove_alias_name(linked_list * aliaslist, char * name){
 	}
 }
 
-char * check_for_alias(char * buffer){
+char *replace(char *str, char *orig, char * rep)
+{
+		static char buffer[4096];
+		char *p;
+		
+		if(!(p = strstr(str, orig))) return str; //is orig actually in str
+					
+		strncpy(buffer, str, p-str); //copy char from str start to orig into buffer
+		buffer[p-str] = '\0';
+							
+		sprintf(buffer+(p-str), "%s%s", rep, p+strlen(orig));
+								
+		return buffer;
+}
+
+char * check_for_alias(linked_list * aliaslist,char * buffer){
+	char * command;
+	char * command_copy;
+	linked_list * command_linkedlist = create_linked_list();
+	
+	command_copy = malloc(strlen(buffer)+1);
+	strcpy(command_copy, buffer);
+	
+	command = strtok(command_copy, "|");
+	do{
+		command = strdup(command);
+		puts(command);
+		push_linked_list(command_linkedlist, command);
+	}while((command = strtok(NULL,"|"))!=NULL);
+	
+	//puts("---------------------------");
+	//print_linked_list(command_linkedlist);
+	
+
+	node * command_list_pointer=command_linkedlist->start;
+	while(command_list_pointer != NULL){
+		char * first_arg=strtok(strdup(command_list_pointer->data)," ");
+		
+		node * alias_list_pointer = aliaslist->start;
+		while(alias_list_pointer != NULL){
+			if(strcmp(first_arg,alias_list_pointer->name_of_node) == 0){
+				char * tmp = replace(command_list_pointer->data,first_arg,alias_list_pointer->data );
+				command_list_pointer->data = tmp;
+			}
+			alias_list_pointer = alias_list_pointer->next;	
+		}
+		command_list_pointer = command_list_pointer->next;
+	}
+	print_linked_list(command_linkedlist);
+	/*
+	if(command_linkedlist->start == NULL){
+		return buffer;
+	}
+
+	node * tmp_ptr = command_linkedlist->start;
+	printf("%x\n",tmp_ptr);
+	char * return_buff = NULL;
+	puts("inits done");
+	while(tmp_ptr->next != NULL){
+		puts("in while");
+		strcat(return_buff,strdup(tmp_ptr->data));
+		puts("concat the | thing");
+		strcat(return_buff,strdup("|"));
+		puts("going to next");
+		tmp_ptr=tmp_ptr->next;
+	}
+	printf("return");
+	strcat(return_buff,tmp_ptr->data);
+	printf("%x\n",return_buff);
+	puts(return_buff);
+	*/
 	return NULL;
 }
 
@@ -182,19 +252,19 @@ char * check_for_env(char * buffer){
 	return NULL;
 }
 
-char * replace_token(char * buffer){
-	char * return_buffer = check_for_env(buffer);
+char * replace_token(linked_list * aliaslist, char * buffer){
+	char * return_buffer; //= check_for_env(buffer);
 	
-	while(return_buffer!=NULL){	
-		buffer = return_buffer;
-		return_buffer = check_for_env(return_buffer);
-	}
-		
-	//return_buffer = check_for_alias(return_buffer);
-	//while(return_buffer!=NULL){
+	//while(return_buffer!=NULL){	
 	//	buffer = return_buffer;
-	//	return_buffer = check_for_alias(return_buffer);
+	//	return_buffer = check_for_env(return_buffer);
 	//}
+		
+	return_buffer = check_for_alias(aliaslist, buffer);
+	while(return_buffer!=NULL){
+		buffer = return_buffer;
+		return_buffer = check_for_alias(aliaslist,return_buffer);
+	}
 	
 	//puts(buffer);
 	return buffer;
