@@ -35,8 +35,6 @@ void execute_externel_command(linked_list * linkedlist){
 		puts("execve has failed");
 	}
 
-
-<<<<<<< Updated upstream
 }
 
 void pop_alias_list(linked_list * linkedlist, char * data){
@@ -61,8 +59,8 @@ void pop_alias_list(linked_list * linkedlist, char * data){
 			next_node = next_node->next;
 		}
         }
-=======
-	return -1;
+        
+        return -1;
 	
 	
 }
@@ -236,7 +234,7 @@ char * check_for_alias(linked_list * aliaslist,char * buffer){
 	else{
 		return NULL;
 	}
->>>>>>> Stashed changes
+
 }
 
 void print_alias_list(linked_list * linkedlist){
@@ -249,13 +247,13 @@ void print_alias_list(linked_list * linkedlist){
 		tmp_alias_name = ((alias_node *)(((node *)(current_node->data))->data))->alias_name;
 		tmp_value = ((alias_node *)(((node *)(current_node->data))->data))->value;
 		
-<<<<<<< Updated upstream
+
 		printf("%s=%s\n", tmp_alias_name, tmp_value);
 		
 		current_node = current_node->next;
 	}
 	
-=======
+
 	return_buffer = check_for_alias(aliaslist, buffer);	
 	
 	while(return_buffer!=NULL){
@@ -264,7 +262,7 @@ void print_alias_list(linked_list * linkedlist){
 	}
 
 	return buffer;
->>>>>>> Stashed changes
+
 }
 
 
