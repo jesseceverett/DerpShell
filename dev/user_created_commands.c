@@ -83,9 +83,40 @@ int executable_in_path(linked_list * linkedlist){
 }
 
 void push_alias_name(linked_list * aliaslist, char * name, char * value){
-	push_linked_list(aliaslist, value);
-	aliaslist->end->name_of_node = name;
+        //check for infinite alias expansion
+        //i.e. if something points back to itself immediatly or thorugh a chain
+
+        int err = 0;
+        node * current_node = aliaslist->start;
+        while(current_node != NULL){
+                if(strcmp(current_node->name_of_node,value) == 0){
+                //if user is trying to set the value of a new alias to a name of an existing alias
+                //then err
+                        printf("Infinite alias expansion detected. Stop.\n");
+                        err = 1;
+                        break;
+                }
+                if(strcmp(current_node->name_of_node,name) == 0){
+                        printf("That name is already aliased. Stop\n");
+                        err = 1;
+                        break;
+                }
+                current_node = current_node->next;
+        }
+
+        if(strcmp(name,value)==0){
+                //you can't alias yourself
+                printf("No! You can't make %s equal itself!\n",name);
+                err = 1;
+
+        }
+
+        if(!err){
+                push_linked_list(aliaslist, value);
+                aliaslist->end->name_of_node = name;
+        }
 }
+
 
 void print_alias_list(linked_list * aliaslist){
 	node * current_node = aliaslist->start;
@@ -149,63 +180,90 @@ char *replace(char *str, char *orig, char * rep)
 		return buffer;
 }
 
+
+
+
 char * check_for_alias(linked_list * aliaslist,char * buffer){
 	char * command;
 	char * command_copy;
-	linked_list * command_linkedlist = create_linked_list();
+	char * first_arg;
+
+	int found = 0;
+	int alias_pres = 0;
+	
+	linked_list * command_linkedlist = create_linked_list(); //create a list for the commands
 	
 	command_copy = malloc(strlen(buffer)+1);
-	strcpy(command_copy, buffer);
-	
+	strcpy(command_copy, buffer);			//malloc the memory and make a copy of our input
+
 	command = strtok(command_copy, "|");
 	do{
 		command = strdup(command);
-		puts(command);
 		push_linked_list(command_linkedlist, command);
 	}while((command = strtok(NULL,"|"))!=NULL);
-	
-	//puts("---------------------------");
-	//print_linked_list(command_linkedlist);
-	
+	//seperate command_copy (buffer) by the '|' character
+	//and put each token into command_linkedlist
+
 
 	node * command_list_pointer=command_linkedlist->start;
+	
+
 	while(command_list_pointer != NULL){
-		char * first_arg=strtok(strdup(command_list_pointer->data)," ");
+
+		char * dummy = strchr(strdup(command_list_pointer->data),' ');
+		if(dummy == NULL){
+			first_arg = strdup(command_list_pointer->data);
+			if (first_arg[strlen(first_arg)-1] == '\n') {
+				first_arg[strlen(first_arg)-1] = '\0';
+			}
+		}
+		else{
+			first_arg=strtok(strdup(command_list_pointer->data)," "); //grab the first word of the node	
+		}
 		
-		node * alias_list_pointer = aliaslist->start;
-		while(alias_list_pointer != NULL){
-			if(strcmp(first_arg,alias_list_pointer->name_of_node) == 0){
+		node * alias_list_pointer = aliaslist->start; //grab the first alias
+		found = 0;
+		while((alias_list_pointer != NULL) && (!found)){
+//			puts(first_arg);
+//			puts("is checking against:");
+//			puts(alias_list_pointer->name_of_node);
+			char * blah = strtok(strdup(alias_list_pointer->name_of_node)," ");
+//			printf("%i\n",strcmp(first_arg,blah));
+			if(strcmp(first_arg,blah) == 0){ //if the first word of a command has an alias then substitute it
 				char * tmp = replace(command_list_pointer->data,first_arg,alias_list_pointer->data );
 				command_list_pointer->data = tmp;
+				found = 1;
+				alias_pres = 1;
 			}
 			alias_list_pointer = alias_list_pointer->next;	
 		}
 		command_list_pointer = command_list_pointer->next;
 	}
-	print_linked_list(command_linkedlist);
-	/*
-	if(command_linkedlist->start == NULL){
-		return buffer;
-	}
+	
+	//replace the values in each node of command_linkedlist with a possible alias
 
 	node * tmp_ptr = command_linkedlist->start;
-	printf("%x\n",tmp_ptr);
 	char * return_buff = NULL;
-	puts("inits done");
-	while(tmp_ptr->next != NULL){
-		puts("in while");
-		strcat(return_buff,strdup(tmp_ptr->data));
-		puts("concat the | thing");
-		strcat(return_buff,strdup("|"));
-		puts("going to next");
-		tmp_ptr=tmp_ptr->next;
+	return_buff = strdup(tmp_ptr->data);
+	if(tmp_ptr->next != NULL){
+		strcat(return_buff,strdup(" |"));
 	}
-	printf("return");
-	strcat(return_buff,tmp_ptr->data);
-	printf("%x\n",return_buff);
-	puts(return_buff);
-	*/
-	return NULL;
+	tmp_ptr = tmp_ptr->next;
+	while(tmp_ptr != NULL){
+		strcat(return_buff,strdup(tmp_ptr->data));
+		if(tmp_ptr->next != NULL){
+			strcat(return_buff,strdup(" |"));
+		}
+		tmp_ptr = tmp_ptr->next;
+	}
+	
+//	printf("The replaced buffer is %s\n",return_buff);
+	if(alias_pres){
+		return return_buff;
+	}
+	else{
+		return NULL;
+	}
 }
 
 char * check_for_env(char * buffer){
