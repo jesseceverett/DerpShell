@@ -16,6 +16,12 @@ unalias					return UNALIAS;
 [<]					return LT;
 [>]					return GT;
 
+\".*\" {
+    yylval.string = (char*)calloc(strlen(yytext)-1, sizeof(char));
+    strncpy(yylval.string, &yytext[1], strlen(yytext)-2);
+    return STRINGLITERAL;
+}					
+
 [a-zA-Z0-9\/.-]+        yylval.string = strdup(yytext); return FILE_NAME;
 
 \n                      return NEW_LINE;

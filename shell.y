@@ -44,7 +44,7 @@ int main(){
 
 %union {char * string; int num; void * linkedlist;}
 %token EXIT CHANGE_DIR NEW_LINE SET_ENV PRINT_ENV UNSET_ENV ALIAS UNALIAS PIPE LT GT
-%token <string> FILE_NAME
+%token <string> FILE_NAME STRINGLITERAL
 
 %left CHANGE_DIR FILE_NAME
 %type <linkedlist> arg_list
@@ -93,7 +93,7 @@ command:
 cd:
 		CHANGE_DIR{chdir(getenv("HOME"));}
 		|
-		CHANGE_DIR FILE_NAME
+		CHANGE_DIR arg
 		{
 			chdir($2);
 			free($2); //since we used strdup on yytext
@@ -101,7 +101,7 @@ cd:
 		;
 
 set_env:
-		SET_ENV FILE_NAME FILE_NAME
+		SET_ENV arg arg
 		{
 			setenv($2, $3,1);
 		}
@@ -118,7 +118,7 @@ print_env:
 		}
 		;
 unset_env:
-		UNSET_ENV FILE_NAME
+		UNSET_ENV arg
 		{
 			unsetenv($2);
 		}
@@ -128,12 +128,12 @@ alias:
 			print_alias_list(aliases);
 		}
 		|
-		ALIAS FILE_NAME FILE_NAME{
+		ALIAS arg arg{
 			push_alias_name(aliases, $2, $3);
 		}
 		;
 unalias:
-		UNALIAS FILE_NAME{
+		UNALIAS arg{
 			remove_alias_name(aliases, $2);
 		}
 		;
@@ -237,7 +237,7 @@ cmd:
 			waitpid(-1, NULL, 0);
 		}
 		|
-		arg_list LT FILE_NAME
+		arg_list LT arg
 		{
 			//accept input from a file	
 			int fd;
@@ -270,7 +270,7 @@ cmd:
 
 		}
 		|
-		arg_list GT FILE_NAME
+		arg_list GT arg
 		{
 			//redirect STDOUT to file
 			int fd;
@@ -309,7 +309,7 @@ cmd:
                         }			
 		}
 		|
-		arg_list GT GT FILE_NAME
+		arg_list GT GT arg
 		{
 			//redirect STDOUT to file
                         int fd;
@@ -356,8 +356,17 @@ arg_list:
 		|
 		arg_list arg{push_linked_list($1,$2); $$ = $1;}
 		;
-arg: FILE_NAME{$$=$1;};
-
+arg: 
+	FILE_NAME
+	{
+		$$=$1;
+	}
+	|
+	STRINGLITERAL
+	{
+		$$=$1;
+	}
+	;
 
 %%
 

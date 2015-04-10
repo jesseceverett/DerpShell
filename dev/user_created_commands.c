@@ -315,6 +315,17 @@ char * replace_token(linked_list * aliaslist, char * buffer){
 	return buffer;
 }
 
+char * remove_quotes(char * buffer){
+	char * return_buffer = malloc(strlen(buffer));
+	int i, j;
+	for(i=0;i<strlen(buffer);i++){
+		if(buffer[i] != '"'){
+			return_buffer[j++] = buffer[i];
+		}
+	}
+	return_buffer[j] = '\0';
+	return return_buffer;
+}
 
 void handle_signal(){
 	puts("Use bye to exit shell!!!");

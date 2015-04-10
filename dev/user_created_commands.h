@@ -23,4 +23,6 @@ char * replace(char *str, char * origin, char * rep);
 
 char * check_for_ampersand(char * buffer);
 
+char * remove_quotes(char * buffer);
+
 #endif
