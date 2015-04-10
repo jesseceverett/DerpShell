@@ -25,9 +25,10 @@ Submission by:  Vincent Moscatello
   
   bye
   
-  unalias
+  unalias: 
                 Must be accompanied by the term to unalias
-  alias
+                
+  alias: 
                 Infinite alias expansion is not allowed, nor is aliasing something to itself
                 typing "alias" will print all aliases
   
