@@ -16,17 +16,26 @@ Submission by:  Vincent Moscatello
   
 ##Curently Working:
   setenv
+  
   unsetenv
+  
   printenv
+  
   cd
+  
   bye
+  
   unalias
+  
   alias
+  
   as well as just typing a command such as "ls" or "cat xx" will search the entire path to find "/bin/ls" and execute that appropriatly
   
 ##Not Working:
   I/O redirection
+  
   Metacharacters (wildcards and such)
+  
   Tilde expansion
   
   
