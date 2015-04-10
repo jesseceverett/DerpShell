@@ -21,4 +21,6 @@ char * replace_token(linked_list * aliaslist, char * buffer);
 
 char * replace(char *str, char * origin, char * rep);
 
+char * check_for_ampersand(char * buffer);
+
 #endif

@@ -11,6 +11,7 @@
 #include "dev/user_created_commands.h"
 
 linked_list * aliases;
+char * is_ampersand_present;
 
 void yyerror(const char *str)
 {
@@ -28,10 +29,12 @@ int main(){
 	puts(" By: Vincent Moscatello, Jesse Everett");
 	aliases = create_linked_list();
 	while(1){
+		is_ampersand_present=NULL;
 		printf("%s","$ ");
 		char buffer[1024];
 		fgets(buffer,1024,stdin);
 		strcpy(buffer,replace_token(aliases,buffer));
+		is_ampersand_present = check_for_ampersand(buffer);
 		yy_switch_to_buffer(yy_scan_string(buffer));
 		yyparse();
 	}
@@ -176,7 +179,9 @@ cmd:
 				exit(0);
 			}else{
 				free_linked_list($1);
-				waitpid(pid, &status, 0);
+				if(is_ampersand_present==NULL){
+					waitpid(pid, &status, 0);
+				}
 			}
 			
 			final:

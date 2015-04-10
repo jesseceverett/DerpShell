@@ -212,11 +212,7 @@ char * check_for_alias(linked_list * aliaslist,char * buffer){
 		node * alias_list_pointer = aliaslist->start; //grab the first alias
 		found = 0;
 		while((alias_list_pointer != NULL) && (!found)){
-//			puts(first_arg);
-//			puts("is checking against:");
-//			puts(alias_list_pointer->name_of_node);
 			char * blah = strtok(strdup(alias_list_pointer->name_of_node)," ");
-//			printf("%i\n",strcmp(first_arg,blah));
 			if(strcmp(first_arg,blah) == 0){ //if the first word of a command has an alias then substitute it
 				char * tmp = replace(command_list_pointer->data,first_arg,alias_list_pointer->data );
 				command_list_pointer->data = tmp;
@@ -245,7 +241,6 @@ char * check_for_alias(linked_list * aliaslist,char * buffer){
 		tmp_ptr = tmp_ptr->next;
 	}
 	
-//	printf("The replaced buffer is %s\n",return_buff);
 	if(alias_pres){
 		return return_buff;
 	}
@@ -296,6 +291,10 @@ char * check_for_env(char * buffer){
 	}
 	
 	return NULL;
+}
+
+char * check_for_ampersand(char * buffer){
+	return strchr(buffer,'&');
 }
 
 char * replace_token(linked_list * aliaslist, char * buffer){
