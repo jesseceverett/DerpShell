@@ -16,18 +16,29 @@ Submission by:  Vincent Moscatello
   
 ##Curently Working:
   setenv
+  
   unsetenv
+  
   printenv
+  
   cd
+  
   bye
-  unalias
-  alias (the substitution is currently not working)
-  as well as just typing "ls" will search the entire path to find /bin/ls and execute that
+  
+  unalias: 
+                Must be accompanied by the term to unalias
+                
+  alias: 
+                Infinite alias expansion is not allowed, nor is aliasing something to itself
+                typing "alias" will print all aliases
+  
+  as well as just typing a command such as "ls" or "cat xx" will search the entire path to find "/bin/ls" and execute that appropriatly
   
 ##Not Working:
-  I/O redirection and other piping
-  Alias subsitution
+  I/O redirection
+                (in progress)
   Metacharacters (wildcards and such)
+  
   Tilde expansion
   
   
