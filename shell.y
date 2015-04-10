@@ -268,13 +268,40 @@ cmd:
 		arg_list GT FILE_NAME
 		{
 			//redirect STDOUT to file
+			int fd;
+                        char * file = $3;
+                        pid_t pid;
 			if((executable_in_path($1)==0) || access(((linked_list *)$1)->start->data, X_OK)==0){
 			}
 			else{
 				puts("Command not found!");
 				goto final;
 			}
+			if(access(file, F_OK) != 0){
+				fclose(fopen($3,"w"));
+			}else{
+				remove($3);	
+				fclose(fopen($3,"w"));
+			}	
 			
+			//If the file doens't exist, make and close it
+			fd = open(file, O_WRONLY);
+                        if(fd == -1){
+                                puts("Error, could not open file");
+                                goto final;
+                        }
+
+                //      close(fd);
+                        pid = fork();
+                        if(pid == 0){
+                                dup2(fd,1);
+                                execute_externel_command($1);
+                                exit(0);
+                        }
+                        else{
+				close(fd);
+                                waitpid(-1, NULL, 0);
+                        }			
 		}
 		;
 arg_list:
