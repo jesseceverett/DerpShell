@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <signal.h>
+#include <fcntl.h>
+#include <sys/stat.h>
 #include "dev/data_structures/data_structures.h"
 #include "dev/user_created_commands.h"
 
@@ -38,7 +40,7 @@ int main(){
 %}
 
 %union {char * string; int num; void * linkedlist;}
-%token EXIT CHANGE_DIR NEW_LINE SET_ENV PRINT_ENV UNSET_ENV ALIAS UNALIAS PIPE
+%token EXIT CHANGE_DIR NEW_LINE SET_ENV PRINT_ENV UNSET_ENV ALIAS UNALIAS PIPE LT GT
 %token <string> FILE_NAME
 
 %left CHANGE_DIR FILE_NAME
@@ -204,50 +206,75 @@ cmd:
 			pid[0] = fork();
 			if(pid[0] == 0){
 				dup2(ab[1],1);
-//				close(1);
-//				dup(ab[1]);
-//				close(ab[1]);
 				for(i=0;i<1;i++){
 					close(ab[i]);
 				}
 				execute_externel_command(argv1);
-//				close(ab[1]);
-//				for(i=0;i<1;i++){
-//					close(ab[i]);
-//				}
-//				close(ab[1]);
 				exit(0);
 			}
 			
 			pid[1] = fork();
 			if(pid[1] == 0){
 				dup2(ab[0],0);
-//				close(0);
-//				dup(ab[0]);
-//				close(ab[0]);
 				for(i=0;i<1;i++){
 					close(ab[i]);
 				}
 				execute_externel_command(argv2);
 				
-//				for(i=0;i<1;i++){
-//					close(ab[i]);
-//				}
-//				close(ab[0]);
 				exit(0);
 			}
 
-//			close(0);
 
 			for(i=0;i<1;i++){
 				close(ab[i]);
 			}
 			
 			waitpid(-1, NULL, 0);
-//			waitpid(pid[1],&status,0);
-//			waitpid(pid[0],&status,0);
-				
-			//close(1);
+		}
+		|
+		arg_list LT FILE_NAME
+		{
+			//accept input from a file	
+			int fd;
+			char * file = $3;
+			pid_t pid;
+
+			if((executable_in_path($1)==0) || access(((linked_list *)$1)->start->data, X_OK)==0){
+                        }
+                        else{
+                                puts("Command not found!");
+                                goto final;
+                        }
+			
+			fd = open(file, O_RDONLY);
+			if(fd == -1){
+				puts("Error, could not open file");
+				goto final;
+			}
+			
+		//	close(fd);
+			pid = fork();
+			if(pid == 0){
+				dup2(fd,0);
+				execute_externel_command($1);
+				exit(0);
+			}
+			else{
+				waitpid(-1, NULL, 0);
+			}
+
+		}
+		|
+		arg_list GT FILE_NAME
+		{
+			//redirect STDOUT to file
+			if((executable_in_path($1)==0) || access(((linked_list *)$1)->start->data, X_OK)==0){
+			}
+			else{
+				puts("Command not found!");
+				goto final;
+			}
+			
 		}
 		;
 arg_list:

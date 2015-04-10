@@ -13,6 +13,8 @@ printenv				return PRINT_ENV;
 alias					return ALIAS;
 unalias					return UNALIAS;
 [|]					return PIPE;
+[<]					return LT;
+[>]					return GT;
 
 [a-zA-Z0-9\/.-]+        yylval.string = strdup(yytext); return FILE_NAME;
 
