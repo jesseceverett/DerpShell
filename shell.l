@@ -5,13 +5,14 @@
 
 %%
 
-cd                      return CHANGE_DIR;
-bye                     return EXIT;
+cd                     			return CHANGE_DIR;
+bye                     		return EXIT;
 setenv					return SET_ENV;
 unsetenv				return UNSET_ENV;
 printenv				return PRINT_ENV;
 alias					return ALIAS;
 unalias					return UNALIAS;
+[|]					return PIPE;
 
 [a-zA-Z0-9\/.-]+        yylval.string = strdup(yytext); return FILE_NAME;
 

@@ -36,7 +36,7 @@ void execute_externel_command(linked_list * linkedlist){
 	command = arguments[0];
 
 	execve(command, arguments, envp);
-	
+	exit(0);	
 }
 
 

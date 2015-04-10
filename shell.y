@@ -38,7 +38,7 @@ int main(){
 %}
 
 %union {char * string; int num; void * linkedlist;}
-%token EXIT CHANGE_DIR NEW_LINE SET_ENV PRINT_ENV UNSET_ENV ALIAS UNALIAS
+%token EXIT CHANGE_DIR NEW_LINE SET_ENV PRINT_ENV UNSET_ENV ALIAS UNALIAS PIPE
 %token <string> FILE_NAME
 
 %left CHANGE_DIR FILE_NAME
@@ -180,6 +180,75 @@ cmd:
 			final:
 				asm("nop");
 		}	
+		|
+		arg_list PIPE arg_list
+		{	
+			int i;
+			int status;
+			
+			pid_t pid[2];
+			int ab[2];
+			
+			linked_list * argv1 = $1;
+			linked_list * argv2 = $3;
+			
+			if(((executable_in_path($1) == 0) || access(((linked_list *)$1)->start->data, X_OK)==0) && ((access(((linked_list *)$3)->start->data, X_OK)==0) || (executable_in_path($3) == 0))){
+				/*Everything is ok! break from if*/
+			}
+			else{
+				puts("Command not found!");
+				goto final;
+			}
+
+			pipe(ab);
+			pid[0] = fork();
+			if(pid[0] == 0){
+				dup2(ab[1],1);
+//				close(1);
+//				dup(ab[1]);
+//				close(ab[1]);
+				for(i=0;i<1;i++){
+					close(ab[i]);
+				}
+				execute_externel_command(argv1);
+//				close(ab[1]);
+//				for(i=0;i<1;i++){
+//					close(ab[i]);
+//				}
+//				close(ab[1]);
+				exit(0);
+			}
+			
+			pid[1] = fork();
+			if(pid[1] == 0){
+				dup2(ab[0],0);
+//				close(0);
+//				dup(ab[0]);
+//				close(ab[0]);
+				for(i=0;i<1;i++){
+					close(ab[i]);
+				}
+				execute_externel_command(argv2);
+				
+//				for(i=0;i<1;i++){
+//					close(ab[i]);
+//				}
+//				close(ab[0]);
+				exit(0);
+			}
+
+//			close(0);
+
+			for(i=0;i<1;i++){
+				close(ab[i]);
+			}
+			
+			waitpid(-1, NULL, 0);
+//			waitpid(pid[1],&status,0);
+//			waitpid(pid[0],&status,0);
+				
+			//close(1);
+		}
 		;
 arg_list:
 		arg{ 
