@@ -35,8 +35,6 @@ Submission by:  Vincent Moscatello
   as well as just typing a command such as "ls" or "cat xx" will search the entire path to find "/bin/ls" and execute that appropriatly
   
 ##Not Working:
-  I/O redirection
-                (in progress)
   Metacharacters (wildcards and such)
   
   Tilde expansion
