@@ -266,9 +266,12 @@ char * check_for_env(char * buffer){
 			//write(1,start_pointer, size);
 			
 			strncpy(env_buffer, start_pointer+2, size_to_read);
-			puts(env_buffer);
-			
-			puts(getenv(env_buffer));
+//			puts(env_buffer);
+			if(getenv(env_buffer) == NULL){
+				puts("That directory doesn't exist");
+				return NULL;
+			}
+//			puts(getenv(env_buffer));
 			
 			return_buffer = malloc(1024);
 			
@@ -281,7 +284,7 @@ char * check_for_env(char * buffer){
 			
 			strncpy(return_buffer_refrence+1, end_pointer+1, strlen(end_pointer)-1);
 
-			puts(return_buffer);
+//			puts(return_buffer);
 
 			return return_buffer;
 		}

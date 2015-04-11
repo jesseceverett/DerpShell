@@ -7,6 +7,7 @@
 #include <signal.h>
 #include <fcntl.h>
 #include <sys/stat.h>
+#include <dirent.h>
 #include "dev/data_structures/data_structures.h"
 #include "dev/user_created_commands.h"
 
@@ -28,6 +29,11 @@ int main(){
 	puts("|--------Welcome to derp shell!--------|"); 
 	puts(" By: Vincent Moscatello, Jesse Everett");
 	aliases = create_linked_list();
+	DIR *d;
+	struct dirent *dir;
+	char * return_buffer;
+	char * dummy_buffer;
+//	d = opendir(".");
 	while(1){
 		is_ampersand_present=NULL;
 		printf("%s","$ ");
@@ -35,6 +41,21 @@ int main(){
 		fgets(buffer,1024,stdin);
 		strcpy(buffer,replace_token(aliases,buffer));
 		is_ampersand_present = check_for_ampersand(buffer);
+/*
+		d=opendir(".");
+		if(d){
+			while((dir = readdir(d)) != NULL){
+//				printf("%s\n", dir->d_name);
+				return_buffer = strtok(return_buffer,".");
+				while(return_buffer != NULL){
+					dummy_buffer = return_buffer;
+					return_buffer = strtok(NULL,".");
+				}
+				puts(dummy_buffer);	
+			}
+			closedir(d);
+		}
+*/
 		yy_switch_to_buffer(yy_scan_string(buffer));
 		yyparse();
 	}
