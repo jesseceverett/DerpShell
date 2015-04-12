@@ -24,7 +24,7 @@ int yywrap(){
 }
 
 int main(){
-//    signal(SIGINT, handle_signal);
+    signal(SIGINT, handle_signal);
 	
 	puts("|--------Welcome to derp shell!--------|"); 
 	puts(" By: Vincent Moscatello, Jesse Everett");

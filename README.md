@@ -15,29 +15,25 @@ Submission by:  Vincent Moscatello
   that would have created too much clutter in the file yacc.
   
 ##Curently Working:
-  setenv
-  
-  unsetenv
-  
-  printenv
-  
-  cd
-  
-  bye
-  
-  unalias: 
-                Must be accompanied by the term to unalias
+User defined functions:
+  setenv  
+  unsetenv  
+  printenv  
+  cd  
+  bye  
+  unalias: Must be accompanied by the term to unalias
                 
-  alias: 
-                Infinite alias expansion is not allowed, nor is aliasing something to itself
-                typing "alias" will print all aliases
-  
-  as well as just typing a command such as "ls" or "cat xx" will search the entire path to find "/bin/ls" and execute that appropriatly
-  
+  alias: Infinite alias expansion is not allowed, nor is aliasing something to itself
+	 typing "alias" will print all aliases
+CMD:
+ Typing a command such as ls or cat will search PATH until the command is found and can then execute
+
+Other:
+ Path variable expansion functions
 ##Not Working:
-  Metacharacters (wildcards and such)
-  
-  Tilde expansion
-  
-  
-  
+  Metacharacters (wildcards and \)
+
+##Other Notes:
+ There is still some unexpected output on certain erroneous input
+	i.e if something not allowed is entered it will not break the shell but it will not have a clean next line
+	CTRL+C will not kill the shell, nor will faulty expressions, the only way to exit is with the "bye" command

@@ -259,7 +259,7 @@ char * check_for_env(char * buffer){
 	char * return_buffer_refrence;
 
 	if((start_pointer = strchr(buffer, '$')) != NULL){
-		if(*(start_pointer + 1) == '{'){
+		if(*(start_pointer + 1) == '{' && (strchr(start_pointer+2,'}') != NULL)){
 			end_pointer = strchr(start_pointer+2,'}');
 			//Handle the actual replacement
 			int size_to_read = end_pointer-start_pointer-2;
