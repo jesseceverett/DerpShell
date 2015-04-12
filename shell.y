@@ -41,21 +41,7 @@ int main(){
 		fgets(buffer,1024,stdin);
 		strcpy(buffer,replace_token(aliases,buffer));
 		is_ampersand_present = check_for_ampersand(buffer);
-/*
-		d=opendir(".");
-		if(d){
-			while((dir = readdir(d)) != NULL){
-//				printf("%s\n", dir->d_name);
-				return_buffer = strtok(return_buffer,".");
-				while(return_buffer != NULL){
-					dummy_buffer = return_buffer;
-					return_buffer = strtok(NULL,".");
-				}
-				puts(dummy_buffer);	
-			}
-			closedir(d);
-		}
-*/
+		strcpy(buffer,replace(buffer,"~",getenv("HOME")));
 		yy_switch_to_buffer(yy_scan_string(buffer));
 		yyparse();
 	}
